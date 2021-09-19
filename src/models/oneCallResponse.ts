@@ -39,6 +39,9 @@ export type OneCallResponse = {
 
     // Hourly forecast
     hourly: {
+        // Delta time
+        dt: number;
+
         // Temperature
         temp: number;
 

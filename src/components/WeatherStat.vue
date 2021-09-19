@@ -3,22 +3,38 @@
     <div class="icon">
       <i :class="icon" :style="{'font-size':iconSize}"></i>
     </div>
+    
     <div class="stat">
       <span class="title">{{ title }}</span>
-      <span class="value">{{ value }}</span>
+      <span class="value">
+        <animated-value
+          :value="value"
+          :decimalCount="decimalCount"
+          :suffix="suffix"/>
+      </span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import AnimatedValue from "./AnimatedValue.vue";
 
-@Component({})
+@Component({
+  components: {
+    AnimatedValue
+  }
+})
+// Used to display a weather stat (humidy, pressure etc)
 export default class WeatherStat extends Vue {
+  // properties
   @Prop() private title!: string;
-  @Prop() private value!: string;
   @Prop() private icon!: string;
   @Prop() private iconSize!: string;
+
+  @Prop() private value!: number;
+  @Prop() private suffix!: string;
+  @Prop({ default: 0 }) private decimalCount!: number;
 }
 </script>
 

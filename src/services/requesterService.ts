@@ -9,7 +9,8 @@ export abstract class RequesterService {
     private cache?: ISetupCache;
 
     public constructor(maxAge?: number) {
-        if(maxAge) {
+        // if maxAge is defined, we have to setup the cache, otherwhise we don't need it
+        if (maxAge) {
             this.cache = setupCache({
                 maxAge: maxAge
             });
@@ -23,24 +24,27 @@ export abstract class RequesterService {
         }
     }
 
+    // make a request on a specific api, based on the baseURL with optional params
     protected async makeRequest<T>(params?: any, api?: string, config?: AxiosRequestConfig): Promise<T> {
         const paramsString: string = this.concatParams({
             ...this.defaultParams,
             ...params
         });
 
+        // make the request and return its data
         const url: string = `${this.baseURL}/${api ? `${api}?` : ""}${paramsString}`;
         const response: AxiosResponse<T> = await this.axios.get<T>(url, config);
-        
+
         return response.data;
     }
 
-    protected concatParams(params: any): string {
+    // concatenate params, from {k1:v1,k2:v2} to k1=v1&k2=v2
+    private concatParams(params: any): string {
         const res: string[] = [];
         for (const k in params) {
             res.push(`${k}=${params[k]}`);
         }
-        
+
         return res.join("&");
     }
 }

@@ -1,11 +1,18 @@
 <template>
   <div class="wrapper">
     <i :class="'icon ' + icon"></i>
+
     <div class="weather-city">
       <span class="weather">{{ weather | capitalize }}</span>
       <span class="city">{{ city | capitalize }}</span>
     </div>
-    <p class="temperature">{{ temperature | formatTemperature }}</p>
+
+    <p class="temperature">
+      <animated-value
+        :value="temperature"
+        suffix="°C"/>
+    </p>
+    
     <div class="location-picker">
       <img src="../assets/location.svg" alt="Location icon">
       <span>Change Location</span>
@@ -15,9 +22,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import AnimatedValue from "./AnimatedValue.vue";
 
-@Component({})
+@Component({
+  components: {
+    AnimatedValue
+  }
+})
+// Used to display the current weather (top, left of the screen)
 export default class CurrentWeatherCard extends Vue {
+  // properties
   @Prop() private weather!: string;
   @Prop() private city!: string;
   @Prop() private temperature!: number;
